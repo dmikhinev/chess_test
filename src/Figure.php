@@ -1,7 +1,14 @@
 <?php
 
 class Figure {
+    /**
+     * @var bool
+     */
     protected $isBlack;
+    /**
+     * @var Turn[]
+     */
+    protected $history = [];
 
     public function __construct($isBlack) {
         $this->isBlack = $isBlack;
@@ -20,8 +27,23 @@ class Figure {
         return $this->isBlack;
     }
 
-    public function canMove($xFrom, $yFrom, $xTo, $yTo): bool
+    public function canMove(Turn $turn): bool
     {
         return true;
+    }
+
+    /**
+     * @return Turn[]
+     */
+    public function getHistory(): array
+    {
+        return $this->history;
+    }
+
+    public function addHistory(Turn $turn): Figure
+    {
+        $this->history[] = $turn;
+
+        return $this;
     }
 }

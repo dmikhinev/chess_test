@@ -58,6 +58,7 @@ class Desk {
 
         if ($turn->valid()) {
             $this->progress[] = $turn;
+            $turn->getFigure()->addHistory($turn);
             $this->figures[$xTo][$yTo] = $this->figures[$xFrom][$yFrom];
             unset($this->figures[$xFrom][$yFrom]);
         } else {
