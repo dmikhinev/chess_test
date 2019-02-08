@@ -2,6 +2,10 @@
 
 class Desk {
     private $figures = [];
+    /**
+     * @var Turn[]
+     */
+    private $progress = [];
 
     public function __construct() {
         $this->figures['a'][1] = new Rook(false);
@@ -50,11 +54,15 @@ class Desk {
         $yFrom = $match[2];
         $xTo   = $match[3];
         $yTo   = $match[4];
+        $turn = new Turn($this, $xFrom, $yFrom, $xTo, $yTo);
 
-        if (isset($this->figures[$xFrom][$yFrom])) {
+        if ($turn->valid()) {
+            $this->progress[] = $turn;
             $this->figures[$xTo][$yTo] = $this->figures[$xFrom][$yFrom];
+            unset($this->figures[$xFrom][$yFrom]);
+        } else {
+            throw new \Exception('Incorrect move');
         }
-        unset($this->figures[$xFrom][$yFrom]);
     }
 
     public function dump() {
@@ -70,5 +78,15 @@ class Desk {
             echo "\n";
         }
         echo "  abcdefgh\n";
+    }
+
+    public function getLastTurn(): ?Turn
+    {
+        return end($this->progress) ?: null;
+    }
+
+    public function getFigure($x, $y): ?Figure
+    {
+        return $this->figures[$x][$y] ?? null;
     }
 }
